@@ -10,9 +10,10 @@ class TaiPanCoupon(Coupon):
         self.url = 'http://www.taipantrading.com/'
         # get date ranges for last 7 days
         self.date_range = [datetime.today() - timedelta(day) for day in range(0, days)]
+        self.save_file = False
 
-    def fetch_coupon(self):
-        #TODO Refactor to make more class friendly
+    def fetch_coupon(self, save_file):
+        self.save_file = save_file
         # loop through days and find coupon
         print 'Looking for coupons...'
         for date in self.date_range:
@@ -27,7 +28,7 @@ class TaiPanCoupon(Coupon):
             date_str_url = 'coupon-%s%s%s' % (month, day, year)
 
             # call pages and process results
-            page_result = requests.get('%s%s' % (tpt_url, date_str_url))
+            page_result = requests.get('%s%s' % (self.url, date_str_url))
 
             if page_result.status_code == 200:
                 # parse page.  image should be inside anchor tag with slug href
@@ -36,15 +37,21 @@ class TaiPanCoupon(Coupon):
 
                 if bs_coupon_link:
                     print 'Coupon has been found for %s/%s/%s!' % (date.month, date.day, date.year)
-                    print  'Location: %s ' % bs_coupon_link.img['src']
+                    print 'Location: %s ' % bs_coupon_link.img['src']
 
-                    #write image file
-                    coupon_result = requests.get(bs_coupon_link.img['src'], stream=True)
-                    temp_file = open(cp_file_name, 'w')
-                    temp_file.write(coupon_result.content)
-                    temp_file.close()
+                    # set link and filename
+                    self.coupon_link = bs_coupon_link.img['src']
+                    self.coupon_file = 'Tai-Pan-%s.jpg' % (date_str_url)
 
+                    if self.save_file:
+                        #write image file
+                        coupon_result = requests.get(bs_coupon_link.img['src'], stream=True)
+
+                        temp_file = open(self.coupon_file, 'w')
+                        temp_file.write(coupon_result.content)
+                        temp_file.close()
                     print 'Complete!'
+                    return self.coupon_link, self.coupon_file
                     break
                 else:
                     print 'Error finding image.'
@@ -53,4 +60,4 @@ class TaiPanCoupon(Coupon):
             else:
                 print 'Error connecting to the web page.'  # err 500 or other
         else:
-            print 'No coupons found for the last 7 days.'
+            print 'No coupons found for the last %i days.' % (len(self.date_range))
