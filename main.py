@@ -1,12 +1,15 @@
 from kivy.app import App
 from kivy.uix.widget import Widget
+from TaiPanCoupon import TaiPanCoupon
 
-
-#TODO Write base Coupon class and TaiPanCoupon subclass. Keep MVC seperate.
 
 class TaiPanRootWidget(Widget):
-    pass
 
+    def search_taipan_coupon(self):
+        tai_pan_coupon = TaiPanCoupon(days=int(self.text_days.text))
+        coupon_results = tai_pan_coupon.fetch_coupon()
+        if coupon_results:
+            self.coupon_image.source = coupon_results[0]
 
 class TaiPanCouponApp(App):
     def build(self):

@@ -2,6 +2,8 @@
 <TaiPanRootWidget>:
     button_search: id_button_search
     text_days: id_text_days
+    placholder_label: id_placeholder_label
+    coupon_image: id_coupon_image
     GridLayout:
         cols: 1
         rows: 3
@@ -29,12 +31,12 @@
                 id: id_button_search
                 text: "Search"
                 font_size: 40
-                on_press: print root.text_days.text
+                on_press: root.search_taipan_coupon()
         Label:
             text: "(No Image)"
-            id: placeholder_label
+            id: id_placeholder_label
         AsyncImage:
             source: None
-            id: coupon_image
+            id: id_coupon_image
             height: root.height * .75
             width: root.width

@@ -12,7 +12,7 @@ class TaiPanCoupon(Coupon):
         self.date_range = [datetime.today() - timedelta(day) for day in range(0, days)]
         self.save_file = False
 
-    def fetch_coupon(self, save_file):
+    def fetch_coupon(self, save_file=False):
         self.save_file = save_file
         # loop through days and find coupon
         print 'Looking for coupons...'
@@ -40,7 +40,7 @@ class TaiPanCoupon(Coupon):
                     print 'Location: %s ' % bs_coupon_link.img['src']
 
                     # set link and filename
-                    self.coupon_link = bs_coupon_link.img['src']
+                    self.coupon_link = bs_coupon_link.img['src'] + 'download.jpg'
                     self.coupon_file = 'Tai-Pan-%s.jpg' % (date_str_url)
 
                     if self.save_file:
