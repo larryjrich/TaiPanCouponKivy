@@ -45,7 +45,7 @@ class TaiPanCoupon(Coupon):
 
                     if self.save_file:
                         #write image file
-                        coupon_result = requests.get(bs_coupon_link.img['src'], stream=True)
+                        coupon_result = requests.get('%s/download.jpg' % (bs_coupon_link.img['src']), stream=True)
 
                         temp_file = open(self.coupon_file, 'w')
                         temp_file.write(coupon_result.content)
