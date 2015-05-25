@@ -2,7 +2,7 @@ from kivy.app import App
 from kivy.uix.widget import Widget
 from TaiPanCoupon import TaiPanCoupon
 
-__version__ = (0,7,5)
+__version__ = '0.7.5'
 
 
 class TaiPanRootWidget(Widget):
